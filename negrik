@@ -1,0 +1,70 @@
+--flex fight sexy scriptik od duvpeho
+
+getgenv().LevelUp = false
+getgenv().TimeUp = false
+
+local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fefiewf688w4f464w8f48wf48fw8t844yu4448d/NEVERLOSE_ui_lib/main/repost_"))()
+
+NEVERLOSE:Theme("nightly") -- [ dark , nightly , original ]
+
+local Window = NEVERLOSE:AddWindow("Valyxor","Flex Fight | sexy scriptik od duvpeho")
+local Notification = NEVERLOSE:Notification()
+
+Notification.MaxNotifications = 6
+
+Window:AddTabLabel('Home')
+
+local MainTab = Window:AddTab('Main','earth') -- [ads , list , folder , earth , locked , home , mouse , user]
+
+local MainSec = MainTab:AddSection('Exploits',"left")
+
+MainSec:AddToggle("Level up", false, function(v)
+    if getgenv().LevelUp == false then
+        getgenv().LevelUp = true
+        LevelUp()
+    else
+        getgenv().LevelUp = false
+    end
+end)
+MainSec:AddToggle("Time exploit", false, function(v)
+    if getgenv().TimeUp == false then
+        getgenv().TimeUp = true
+        TimeUp()
+    else
+        getgenv().TimeUp = false
+    end
+end)
+MainSec:AddButton("Unlock Swords", function()
+    game.ReplicatedStorage.UnlockedSwords:FireServer({true, true, true}, "894An3ti44Ex321P3llo99i3t")
+end)
+
+MainSec:AddLabel("Label")
+MainSec:AddButton("Close GUI", function()
+    for i, v in pairs(game.CoreGui:GetChildren()) do
+        if v.Name == "Valyxor" then
+            v:Destroy()
+        end
+    end
+end)
+
+
+function LevelUp()
+    while getgenv().LevelUp == true do
+        wait(0.15)
+        for i = 1, 50 do
+            game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(6, "An5nit43534per3plo34itdfs")
+        end
+    end
+end
+
+function TimeUp()
+    while getgenv().TimeUp == true do
+        wait(0.1)
+        for i = 1, 50 do
+            game:GetService("ReplicatedStorage"):WaitForChild("ChangeTime"):FireServer("Anti333Exploitz123FF45324", 433, 429)
+        end
+    end
+end
+
+
+--game:GetService("CoreGui"):FindFirstChild("ScreenGui")
