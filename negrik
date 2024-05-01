@@ -2,6 +2,8 @@
 
 getgenv().LevelUp = false
 getgenv().TimeUp = false
+getgenv().KillAura = false
+getgenv().Effect = false
 
 local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fefiewf688w4f464w8f48wf48fw8t844yu4448d/NEVERLOSE_ui_lib/main/repost_"))()
 
@@ -15,8 +17,12 @@ Notification.MaxNotifications = 6
 Window:AddTabLabel('Home')
 
 local MainTab = Window:AddTab('Main','earth') -- [ads , list , folder , earth , locked , home , mouse , user]
+local CombatTab = Window:AddTab('Combat','earth')
+local FunTab = Window:AddTab('Fun','earth')
 
 local MainSec = MainTab:AddSection('Exploits',"left")
+local CombatSec = CombatTab:AddSection('Combat',"left")
+local FunSec = FunTab:AddSection('Fun',"left")
 
 MainSec:AddToggle("Level up", false, function(v)
     if getgenv().LevelUp == false then
@@ -46,7 +52,23 @@ MainSec:AddButton("Close GUI", function()
         end
     end
 end)
+CombatSec:AddToggle("Kill Aura", false, function()
+    if getgenv().KillAura == false then
+        getgenv().KillAura = true
+        RunKA()
+    else
+        getgenv().KillAura = false
+    end
+end)
 
+FunSec:AddToggle("Effect Terror", false, function()
+    if getgenv().Effect == false then
+        getgenv().Effect = true
+        EffectTerror()
+    else
+        getgenv().Effect = false
+    end
+end)
 
 function LevelUp()
     while getgenv().LevelUp == true do
@@ -66,5 +88,37 @@ function TimeUp()
     end
 end
 
+function RunKA()
+    while getgenv().KillAura == true do
+        wait()
+        for i, v in pairs(workspace:GetChildren()) do
+            if game.Players.LocalPlayer.Character then
+                if game.Players.LocalPlayer.Character.HumanoidRootPart then
+                    if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
+                        if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude < 15 then
+                            if v.Name ~= game.Players.LocalPlayer.Name then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                    game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                end
+                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                game.Players.LocalPlayer.Character.Sword:Activate()
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function EffectTerror()
+    while getgenv().Effect == true do
+        wait(0.05)
+        for i, v in pairs(game.Players:GetChildren()) do
+            game:GetService("ReplicatedStorage"):WaitForChild("PerformKillEffect"):FireServer(v.Name)
+        end
+    end
+end
 
 --game:GetService("CoreGui"):FindFirstChild("ScreenGui")
