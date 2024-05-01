@@ -4,10 +4,13 @@ getgenv().LevelUp = false
 getgenv().TimeUp = false
 getgenv().KillAura = false
 getgenv().Effect = false
+getgenv().LoopKill = false
+
+local Targets = {}
 
 local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fefiewf688w4f464w8f48wf48fw8t844yu4448d/NEVERLOSE_ui_lib/main/repost_"))()
 
-NEVERLOSE:Theme("nightly") -- [ dark , nightly , original ]
+NEVERLOSE:Theme("nightly")
 
 local Window = NEVERLOSE:AddWindow("Valyxor","Flex Fight | sexy scriptik od duvpeho")
 local Notification = NEVERLOSE:Notification()
@@ -16,7 +19,7 @@ Notification.MaxNotifications = 6
 
 Window:AddTabLabel('Home')
 
-local MainTab = Window:AddTab('Main','earth') -- [ads , list , folder , earth , locked , home , mouse , user]
+local MainTab = Window:AddTab('Main','earth')
 local CombatTab = Window:AddTab('Combat','earth')
 local FunTab = Window:AddTab('Fun','earth')
 
@@ -67,6 +70,34 @@ FunSec:AddToggle("Effect Terror", false, function()
         EffectTerror()
     else
         getgenv().Effect = false
+    end
+end)
+FunSec:addTextbox('Add Target',"",function(v)
+	table.insert(Targets, v)
+    for i, v2 in pairs(Targets) do
+        print(i, v2)
+    end
+end)
+FunSec:addTextbox('Remove Target',"",function(val)
+    for i, v in ipairs(Targets) do
+        if v == val then
+            table.remove(Targets, i)
+            break
+        end
+    end
+    for i, v2 in pairs(Targets) do
+        print(i, v2)
+    end
+end)
+FunSec:AddButton("Remove all Targets", function()
+    Targets = {}
+end)
+FunSec:AddToggle("Loop Kill", false, function()
+    if getgenv().LoopKill == false then
+        getgenv().LoopKill = true
+        LoopKill()
+    else
+        getgenv().LoopKill = false
     end
 end)
 
@@ -121,4 +152,30 @@ function EffectTerror()
     end
 end
 
---game:GetService("CoreGui"):FindFirstChild("ScreenGui")
+function LoopKill()
+    while getgenv().LoopKill == true do
+        wait()
+        for i, v in pairs(game.Players:GetPlayers()) do
+            if table.find(Targets, v.Name) then
+                if v.Character then
+                    if v.Character:FindFirstChild("HumanoidRootPart") then
+                        if v.Character:FindFirstChild("Humanoid") then
+                            if v.Character.Humanoid.Health ~= 0 then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                    game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                end
+                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
