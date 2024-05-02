@@ -114,6 +114,14 @@ CombatSec:AddToggle("Loop Kill", false, function()
         getgenv().LoopKill = false
     end
 end)
+CombatSec:AddToggle("Teleport Loop Kill", false, function()
+    if getgenv().TeleportLoopKill == false then
+        getgenv().TeleportLoopKill = true
+        TeleportLoopKill()
+    else
+        getgenv().TeleportLoopKill = false
+    end
+end)
 CombatSec:AddButton("Kill Everyone", function()
     if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
         game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
