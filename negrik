@@ -1,11 +1,16 @@
 --flex fight sexy scriptik od duvpeho
 
+
+
 getgenv().LevelUp = false
 getgenv().TimeUp = false
 getgenv().KillAura = false
 getgenv().Effect = false
 getgenv().LoopKill = false
 getgenv().TeleportLoopKill = false
+getgenv().SpinBot = false
+getgenv().SpinBotSpeed = 0.55
+getgenv().AntiCheatBypass = false
 
 local Targets = {}
 
@@ -25,6 +30,7 @@ local CombatTab = Window:AddTab('Combat','earth')
 local FunTab = Window:AddTab('Fun','earth')
 
 local MainSec = MainTab:AddSection('Exploits',"left")
+local MovementSec = MainTab:AddSection('Movement',"right")
 local CombatSec = CombatTab:AddSection('Combat',"left")
 local FunSec = FunTab:AddSection('Fun',"left")
 
@@ -61,12 +67,23 @@ MainSec:AddButton("Anti Cheat Bypass", function()
             end
         end
     end)
+    getgenv().AntiCheatBypass = true
 end)
 MainSec:AddButton("Close GUI", function()
     for i, v in pairs(game.CoreGui:GetChildren()) do
         if v.Name == "Valyxor" then
             v:Destroy()
         end
+    end
+end)
+MovementSec:AddSlider('WalkSpeed',1,500,16,function(val)
+	if getgenv().AntiCheatBypass == true then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = val
+    end
+end)
+MovementSec:AddSlider('JumpPower',1,500,50,function(val)
+	if getgenv().AntiCheatBypass == true then
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = val
     end
 end)
 CombatSec:AddToggle("Kill Aura", false, function()
@@ -85,6 +102,17 @@ FunSec:AddToggle("Effect Terror", false, function()
     else
         getgenv().Effect = false
     end
+end)
+FunSec:AddToggle("Spin Bot", false, function()
+    if getgenv().SpinBot == false then
+        getgenv().SpinBot = true
+        SpinBot()
+    else
+        getgenv().SpinBot = false
+    end
+end)
+FunSec:AddSlider('Spin Bot Speed',1,100,50,function(val)
+	getgenv().SpinBotSpeed = val
 end)
 CombatSec:addTextbox('Add Target',"",function(v)
 	table.insert(Targets, v)
@@ -242,4 +270,15 @@ function TeleportLoopKill()
             end
         end
     end
+end
+
+function SpinBot()
+    local renderStep
+    renderStep = game:GetService("RunService").RenderStepped:Connect(function()
+        if getgenv().SpinBot == true then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, getgenv().SpinBotSpeed, 0)
+        else
+            renderStep:Disconnect()
+        end
+    end)
 end
