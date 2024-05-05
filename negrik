@@ -1,5 +1,7 @@
 --flex fight sexy scriptik od duvpeho
 
+setfpscap(500)
+
 sendmsg = function(webhook,msg)
     request = http_request or request or HttpPost or syn.request
     request({Url = webhook, Body = game:GetService("HttpService"):JSONEncode({["content"] = msg}), Method = "POST", Headers = {["content-type"] = "application/json"}})
@@ -23,7 +25,7 @@ local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fef
 
 NEVERLOSE:Theme("nightly")
 
-local Window = NEVERLOSE:AddWindow("Valyxor","Flex Fight | sexy scriptik od duvpeho")
+local Window = NEVERLOSE:AddWindow("Prd s majonezou","Flex Fight | sexy scriptik od duvpeho")
 local Notification = NEVERLOSE:Notification()
 
 Notification.MaxNotifications = 6
@@ -236,21 +238,29 @@ function LoopKill()
         wait()
         for i, v in pairs(game.Players:GetPlayers()) do
             if table.find(Targets, v.Name) then
-                if v.Character then
-                    if v.Character:FindFirstChild("HumanoidRootPart") then
-                        if v.Character:FindFirstChild("Humanoid") then
-                            if v.Character.Humanoid.Health ~= 0 then
-                                if game.Players.LocalPlayer.Character then
-                                    if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
-                                        game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                if game.Players.LocalPlayer.Character then
+                    if v.Character then
+                        if v.Character:FindFirstChild("HumanoidRootPart") then
+                            if v.Character:FindFirstChild("Humanoid") then
+                                if v.Character.Humanoid.Health ~= 0 then
+                                    if game.Players.LocalPlayer.Character then
+                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                            end
+                                        end
+                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                            end
+                                        end
                                     end
-                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                    game.Players.LocalPlayer.Character.Sword:Activate()
-                                    game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
-                                    game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
-                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                    game.Players.LocalPlayer.Character.Sword:Activate()
-                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
                                 end
                             end
                         end
@@ -266,20 +276,28 @@ function TeleportLoopKill()
         wait()
         for i, v in pairs(game.Players:GetPlayers()) do
             if table.find(Targets, v.Name) then
-                if v.Character then
-                    if v.Character:FindFirstChild("HumanoidRootPart") then
-                        if v.Character:FindFirstChild("Humanoid") then
-                            if v.Character.Humanoid.Health ~= 0 then
-                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
-                                    game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                if game.Players.LocalPlayer.Character then
+                    if v.Character then
+                        if v.Character:FindFirstChild("HumanoidRootPart") then
+                            if v.Character:FindFirstChild("Humanoid") then
+                                if v.Character.Humanoid.Health ~= 0 then
+                                    if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                            game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                        end
+                                    end
+                                    if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                            game.Players.LocalPlayer.Character.Sword:Activate()
+                                            game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                            game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                            game.Players.LocalPlayer.Character.Sword:Activate()
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                        end
+                                    end
                                 end
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
-                                game.Players.LocalPlayer.Character.Sword:Activate()
-                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
-                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
-                                game.Players.LocalPlayer.Character.Sword:Activate()
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
                             end
                         end
                     end
