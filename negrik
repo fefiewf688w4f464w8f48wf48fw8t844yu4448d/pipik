@@ -18,6 +18,7 @@ getgenv().TeleportLoopKill = false
 getgenv().SpinBot = false
 getgenv().SpinBotSpeed = 0.55
 getgenv().AntiCheatBypass = false
+getgenv().RenderSteppedMethod = false
 
 local Targets = {}
 
@@ -167,6 +168,13 @@ CombatSec:AddToggle("Teleport Loop Kill", false, function()
         getgenv().TeleportLoopKill = false
     end
 end)
+CombatSec:AddToggle("FPS Based Kill Method", false, function()
+    if getgenv().RenderSteppedMethod == false then
+        getgenv().RenderSteppedMethod = true
+    else
+        getgenv().RenderSteppedMethod = false
+    end
+end)
 CombatSec:AddButton("Kill Everyone", function()
     if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
         game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
@@ -186,7 +194,24 @@ function LevelUp()
     while getgenv().LevelUp == true do
         wait(0.15)
         for i = 1, 50 do
-            game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(6, "An5nit43534per3plo34itdfs")
+            if game.Players.LocalPlayer.Challenges.Challenge1.Value == true and game.Players.LocalPlayer.Challenges.Challenge2.Value == false then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(1, "An5nit43534per3plo34itdfs")
+            end
+            if game.Players.LocalPlayer.Challenges.Challenge2.Value == true and game.Players.LocalPlayer.Challenges.Challenge3.Value == false then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(2, "An5nit43534per3plo34itdfs")
+            end
+            if game.Players.LocalPlayer.Challenges.Challenge3.Value == true and game.Players.LocalPlayer.Challenges.Challenge4.Value == false then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(3, "An5nit43534per3plo34itdfs")
+            end
+            if game.Players.LocalPlayer.Challenges.Challenge4.Value == true and game.Players.LocalPlayer.Challenges.Challenge5.Value == false then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(4, "An5nit43534per3plo34itdfs")
+            end
+            if game.Players.LocalPlayer.Challenges.Challenge5.Value == true and game.Players.LocalPlayer.Challenges.Challenge6.Value == false then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(5, "An5nit43534per3plo34itdfs")
+            end
+            if game.Players.LocalPlayer.Challenges.Challenge6.Value == true then
+                game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(6, "An5nit43534per3plo34itdfs")
+            end
         end
     end
 end
@@ -234,30 +259,74 @@ function EffectTerror()
 end
 
 function LoopKill()
-    while getgenv().LoopKill == true do
-        wait()
-        for i, v in pairs(game.Players:GetPlayers()) do
-            if table.find(Targets, v.Name) then
-                if game.Players.LocalPlayer.Character then
-                    if v.Character then
-                        if v.Character:FindFirstChild("HumanoidRootPart") then
-                            if v.Character:FindFirstChild("Humanoid") then
-                                if v.Character.Humanoid.Health ~= 0 then
-                                    if game.Players.LocalPlayer.Character then
-                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
-                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                                game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+    if getgenv().RenderSteppedMethod == true then
+        local renderStep
+        renderStep = game:GetService("RunService").RenderStepped:Connect(function()
+            if getgenv().LoopKill == true then
+                for i, v in pairs(game.Players:GetPlayers()) do
+                    if table.find(Targets, v.Name) then
+                        if game.Players.LocalPlayer.Character then
+                            if v.Character then
+                                if v.Character:FindFirstChild("HumanoidRootPart") then
+                                    if v.Character:FindFirstChild("Humanoid") then
+                                        if v.Character.Humanoid.Health ~= 0 then
+                                            if game.Players.LocalPlayer.Character then
+                                                game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
+                                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                                    if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                        game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                                    end
+                                                end
+                                                if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                                    if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                        game.Players.LocalPlayer.Character.Sword:Activate()
+                                                        game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                        game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                        game.Players.LocalPlayer.Character.Sword:Activate()
+                                                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                    end
+                                                end
                                             end
                                         end
-                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
-                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                                game.Players.LocalPlayer.Character.Sword:Activate()
-                                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
-                                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
-                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                                game.Players.LocalPlayer.Character.Sword:Activate()
-                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                renderStep:Disconnect()
+            end
+        end)
+    else
+        while getgenv().LoopKill == true do
+            wait()
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if table.find(Targets, v.Name) then
+                    if game.Players.LocalPlayer.Character then
+                        if v.Character then
+                            if v.Character:FindFirstChild("HumanoidRootPart") then
+                                if v.Character:FindFirstChild("Humanoid") then
+                                    if v.Character.Humanoid.Health ~= 0 then
+                                        if game.Players.LocalPlayer.Character then
+                                            game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
+                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                    game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                                end
+                                            end
+                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                                if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                    game.Players.LocalPlayer.Character.Sword:Activate()
+                                                    game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                    game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                    game.Players.LocalPlayer.Character.Sword:Activate()
+                                                    v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                end
                                             end
                                         end
                                     end
@@ -272,29 +341,71 @@ function LoopKill()
 end
 
 function TeleportLoopKill()
-    while getgenv().TeleportLoopKill == true do
-        wait()
-        for i, v in pairs(game.Players:GetPlayers()) do
-            if table.find(Targets, v.Name) then
-                if game.Players.LocalPlayer.Character then
-                    if v.Character then
-                        if v.Character:FindFirstChild("HumanoidRootPart") then
-                            if v.Character:FindFirstChild("Humanoid") then
-                                if v.Character.Humanoid.Health ~= 0 then
-                                    if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
-                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                            game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+    if getgenv().RenderSteppedMethod == true then
+        local renderStep
+        renderStep = game:GetService("RunService").RenderStepped:Connect(function()
+            if getgenv().TeleportLoopKill == true then
+                for i, v in pairs(game.Players:GetPlayers()) do
+                    if table.find(Targets, v.Name) then
+                        if game.Players.LocalPlayer.Character then
+                            if v.Character then
+                                if v.Character:FindFirstChild("HumanoidRootPart") then
+                                    if v.Character:FindFirstChild("Humanoid") then
+                                        if v.Character.Humanoid.Health ~= 0 then
+                                            game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
+                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                                if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                    game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                                end
+                                            end
+                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                                if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                                    game.Players.LocalPlayer.Character.Sword:Activate()
+                                                    game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                    game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                                    game.Players.LocalPlayer.Character.Sword:Activate()
+                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                                end
+                                            end
                                         end
                                     end
-                                    if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
-                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
-                                            game.Players.LocalPlayer.Character.Sword:Activate()
-                                            game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
-                                            game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
-                                            game.Players.LocalPlayer.Character.Sword:Activate()
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                renderStep:Disconnect()
+            end
+        end)
+    else
+        while getgenv().TeleportLoopKill == true do
+            wait()
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if table.find(Targets, v.Name) then
+                    if game.Players.LocalPlayer.Character then
+                        if v.Character then
+                            if v.Character:FindFirstChild("HumanoidRootPart") then
+                                if v.Character:FindFirstChild("Humanoid") then
+                                    if v.Character.Humanoid.Health ~= 0 then
+                                        game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
+                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                            end
+                                        end
+                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:FindFirstChild("HumanoidRootPart").CFrame
+                                            end
                                         end
                                     end
                                 end
