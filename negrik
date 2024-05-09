@@ -271,7 +271,6 @@ function LoopKill()
                                     if v.Character:FindFirstChild("Humanoid") then
                                         if v.Character.Humanoid.Health ~= 0 then
                                             if game.Players.LocalPlayer.Character then
-                                                game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
                                                 if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
                                                     if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
                                                         game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
@@ -311,7 +310,6 @@ function LoopKill()
                                 if v.Character:FindFirstChild("Humanoid") then
                                     if v.Character.Humanoid.Health ~= 0 then
                                         if game.Players.LocalPlayer.Character then
-                                            game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
                                             if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
                                                 if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
                                                     game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
@@ -352,7 +350,6 @@ function TeleportLoopKill()
                                 if v.Character:FindFirstChild("HumanoidRootPart") then
                                     if v.Character:FindFirstChild("Humanoid") then
                                         if v.Character.Humanoid.Health ~= 0 then
-                                            game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
                                             if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
                                                 if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
                                                     game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
@@ -390,7 +387,6 @@ function TeleportLoopKill()
                             if v.Character:FindFirstChild("HumanoidRootPart") then
                                 if v.Character:FindFirstChild("Humanoid") then
                                     if v.Character.Humanoid.Health ~= 0 then
-                                        game.Players.LocalPlayer.CharacterAppearanceLoaded:Wait()
                                         if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
                                             if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
                                                 game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
