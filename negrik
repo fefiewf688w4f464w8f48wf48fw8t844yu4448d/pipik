@@ -19,6 +19,7 @@ getgenv().SpinBot = false
 getgenv().SpinBotSpeed = 0.55
 getgenv().AntiCheatBypass = false
 getgenv().RenderSteppedMethod = false
+getgenv().LvlUpSpeed = 1
 
 local Targets = {}
 
@@ -49,6 +50,9 @@ MainSec:AddToggle("Level up", false, function(v)
     else
         getgenv().LevelUp = false
     end
+end)
+MainSec:addTextbox('Lvl up speed: ',"",function(v)
+    getgenv().LvlUpSpeed = v
 end)
 MainSec:AddToggle("Time exploit", false, function(v)
     if getgenv().TimeUp == false then
@@ -193,7 +197,7 @@ end)
 function LevelUp()
     while getgenv().LevelUp == true do
         wait(0.15)
-        for i = 1, 50 do
+        for i = 1, getgenv().LvlUpSpeed do
             if game.Players.LocalPlayer.Challenges.Challenge1.Value == true and game.Players.LocalPlayer.Challenges.Challenge2.Value == false then
                 game:GetService("ReplicatedStorage").ClaimChallenge:FireServer(1, "An5nit43534per3plo34itdfs")
             end
