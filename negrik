@@ -20,14 +20,17 @@ getgenv().SpinBotSpeed = 0.55
 getgenv().AntiCheatBypass = false
 getgenv().RenderSteppedMethod = false
 getgenv().LvlUpSpeed = 1
+getgenv().Predict = false
+getgenv().PredictValue = 0.2
 
 local Targets = {}
+local RespawnTime = game.Players.RespawnTime
 
 local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fefiewf688w4f464w8f48wf48fw8t844yu4448d/NEVERLOSE_ui_lib/main/repost_"))()
 
 NEVERLOSE:Theme("nightly")
 
-local Window = NEVERLOSE:AddWindow("Prd s majonezou v2.0","Flex Fight | sexy scriptik od duvpeho")
+local Window = NEVERLOSE:AddWindow("Prd s majonezou v2.1","Flex Fight | sexy scriptik od duvpeho")
 local Notification = NEVERLOSE:Notification()
 
 Notification.MaxNotifications = 6
@@ -164,6 +167,17 @@ CombatSec:AddToggle("Loop Kill", false, function()
         getgenv().LoopKill = false
     end
 end)
+CombatSec:AddToggle("Predict Loop Kill", false, function()
+    if getgenv().Predict == false then
+        getgenv().Predict = true
+        --PredictLoop()
+    else
+        getgenv().Predict = false
+    end
+end)
+CombatSec:addTextbox('Predict Value: ',"0.25",function(v)
+    getgenv().PredictValue = v
+end)
 CombatSec:AddToggle("Teleport Loop Kill", false, function()
     if getgenv().TeleportLoopKill == false then
         getgenv().TeleportLoopKill = true
@@ -272,6 +286,134 @@ function EffectTerror()
     end)
 end
 
+-- Variables to track active connections
+local activeConnections = {}
+
+-- Function to swing the sword at the predicted respawn time
+function PredictRespawn(targetPlayer)
+    local respawnTime = RespawnTime or 5  -- Adjust the respawn time (seconds)
+    local predictTime = 0.25  -- Time before respawn to swing the sword (0.25 seconds)
+    
+    -- Loop to handle continuous prediction and swing
+    while getgenv().Predict do
+        task.wait(0.1)  -- Delay to prevent excessive CPU usage
+
+        if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+            local humanoid = targetPlayer.Character.Humanoid
+            if humanoid.Health <= 0 then
+                print("Target", targetPlayer.Name, "has died. Predicting respawn...")
+
+                -- Predict the time before respawn (0.25 seconds before respawn)
+                task.delay(respawnTime - predictTime, function()
+                    if not getgenv().Predict then
+                        print("Prediction toggled off during respawn prediction.")
+                        return
+                    end
+                    
+                    if humanoid.Health == 0 then  -- If the player is still dead, swing the sword
+                        print("Swinging sword at predicted respawn time for:", targetPlayer.Name)
+                        local localPlayer = game.Players.LocalPlayer
+                        local sword = localPlayer.Backpack:FindFirstChild("Sword") or localPlayer.Character:FindFirstChild("Sword")
+
+                        if sword and sword:FindFirstChild("Handle") then
+                            -- Equip sword and prepare attack
+                            sword.Parent = localPlayer.Character
+                            sword.Handle.Massless = true
+                            sword.Handle.Size = Vector3.new(15, 15, 15)
+                            spawn(function()
+                                sword:Activate()
+                                task.wait(0.05)
+                                sword:Activate()
+                                task.wait(0.05)
+                                sword:Activate()
+                            end)
+
+                            -- Attack at the predicted respawn location
+                            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                local targetCFrame = localPlayer.Character.Sword.Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                targetPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+                                sword:Activate()
+                            else
+                                print("Predicted respawn location not found for:", targetPlayer.Name)
+                            end
+                        else
+                            print("Sword not found for local player.")
+                        end
+                    end
+                end)
+                
+                -- Wait until player respawns
+                while targetPlayer.Character == nil or targetPlayer.Character:FindFirstChild("Humanoid") == nil or targetPlayer.Character.Humanoid.Health <= 0 do
+                    task.wait(0.1)
+                end
+
+                -- Player has respawned, teleport them to the local player
+                if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    print("Teleporting target back to local player:", targetPlayer.Name)
+                    targetPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)  -- Adjust offset if needed
+                end
+            end
+        end
+    end
+end
+
+-- Function to start the prediction process for all target players
+function StartPrediction()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if table.find(Targets, player.Name) and not activeConnections[player.Name] then
+            print("Starting prediction for:", player.Name)
+            activeConnections[player.Name] = spawn(function()
+                PredictRespawn(player)
+            end)
+        end
+    end
+
+    -- Monitor new players joining
+    game.Players.PlayerAdded:Connect(function(player)
+        if table.find(Targets, player.Name) and not activeConnections[player.Name] then
+            print("Starting prediction for new player:", player.Name)
+            activeConnections[player.Name] = spawn(function()
+                PredictRespawn(player)
+            end)
+        end
+    end)
+end
+
+-- Function to stop the prediction process and clear all active connections
+function StopPrediction()
+    -- Disconnect all active connections
+    for playerName, thread in pairs(activeConnections) do
+        activeConnections[playerName] = nil
+    end
+    print("Prediction stopped.")
+end
+
+-- Function to toggle prediction on or off
+function TogglePrediction(state)
+    if state then
+        print("Prediction enabled")
+        StartPrediction()
+    else
+        print("Prediction disabled")
+        StopPrediction()
+    end
+end
+
+-- Monitor the toggle state
+getgenv().Predict = false -- Default state
+spawn(function()
+    local lastState = getgenv().Predict
+    while true do
+        task.wait(0.1) -- Monitor for state changes
+        if lastState ~= getgenv().Predict then
+            TogglePrediction(getgenv().Predict)
+            lastState = getgenv().Predict
+        end
+    end
+end)
+
+
+
 function LoopKill()
     spawn(function()
         if getgenv().RenderSteppedMethod == true then
@@ -286,20 +428,24 @@ function LoopKill()
                                         if v.Character:FindFirstChild("Humanoid") then
                                             if v.Character.Humanoid.Health ~= 0 then
                                                 if game.Players.LocalPlayer.Character then
-                                                    if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
-                                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                                            game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                                    if getgenv().Predict == true then
+
+                                                    else
+                                                        if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword") then
+                                                            if game.Players.LocalPlayer.Backpack:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                                game.Players.LocalPlayer.Backpack:FindFirstChild("Sword").Parent = game.Players.LocalPlayer.Character
+                                                            end
                                                         end
-                                                    end
-                                                    if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
-                                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
-                                                            v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                                            game.Players.LocalPlayer.Character.Sword:Activate()
-                                                            game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
-                                                            game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
-                                                            v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
-                                                            game.Players.LocalPlayer.Character.Sword:Activate()
-                                                            v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                        if game.Players.LocalPlayer.Character:FindFirstChild("Sword") then
+                                                            if game.Players.LocalPlayer.Character:FindFirstChild("Sword"):FindFirstChild("Handle") then
+                                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                                game.Players.LocalPlayer.Character.Sword.Handle.Massless = true
+                                                                game.Players.LocalPlayer.Character.Sword.Handle.Size = Vector3.new(15, 15, 15)
+                                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                                v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("Sword").Handle.CFrame + Vector3.new(2.5, 2.5, 2.5)
+                                                            end
                                                         end
                                                     end
                                                 end
@@ -446,15 +592,3 @@ function SpinBot()
         end)
     end)
 end
-
-function LoadCharacterLoop()
-    spawn(function()
-        if game.Players.LocalPlayer then
-            game:GetService("RunService").RenderStepped:Connect(function()
-                game.Players.LocalPlayer:LoadCharacter()
-            end)
-        end
-    end)
-end
-
-LoadCharacterLoop()
