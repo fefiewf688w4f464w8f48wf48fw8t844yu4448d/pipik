@@ -22,6 +22,8 @@ getgenv().RenderSteppedMethod = false
 getgenv().LvlUpSpeed = 1
 getgenv().Predict = false
 getgenv().PredictValue = 0.2
+getgenv().PlayerModelSet = false
+getgenv().BodyPartsSet = true
 
 local Targets = {}
 local RespawnTime = game.Players.RespawnTime
@@ -30,7 +32,7 @@ local NEVERLOSE = loadstring(game:HttpGet("https://raw.githubusercontent.com/fef
 
 NEVERLOSE:Theme("nightly")
 
-local Window = NEVERLOSE:AddWindow("Prd s majonezou v2.1","Flex Fight | sexy scriptik od duvpeho")
+local Window = NEVERLOSE:AddWindow("Prd s majonezou v2.2","Flex Fight | sexy scriptik od duvpeho")
 local Notification = NEVERLOSE:Notification()
 
 Notification.MaxNotifications = 6
@@ -44,6 +46,7 @@ local FunTab = Window:AddTab('Fun','earth')
 local MainSec = MainTab:AddSection('Exploits',"left")
 local MovementSec = MainTab:AddSection('Movement',"right")
 local CombatSec = CombatTab:AddSection('Combat',"left")
+local LoopSets = CombatTab:AddSection('Loop Kill Settings',"right")
 local FunSec = FunTab:AddSection('Fun',"left")
 
 MainSec:AddToggle("Level up", false, function(v)
@@ -208,6 +211,22 @@ CombatSec:AddButton("Kill Everyone", function()
         wait(0.05)
         game.Players.LocalPlayer.Character:WaitForChild("Sword").Handle.Size = Vector3.new(4, 4, 4)
     end)
+end)
+LoopSets:AddDropdown('Wait for',{"Player Model","Body Parts"},"Body Parts",function(val)
+	if val=="Player Model" then
+        getgenv().PlayerModelSet = true
+        print("PlayerModelSet = true")
+    else
+        getgenv().PlayerModelSet = false
+        print("PlayerModelSet = false")
+    end
+    if val=="Body Parts" then
+        getgenv().BodyPartsSet = true
+        print("BodyPartsSet = true")
+    else
+        getgenv().BodyPartsSet = false
+        print("BodyPartsSet = false")
+    end
 end)
 
 function LevelUp()
@@ -424,6 +443,17 @@ function LoopKill()
                         if table.find(Targets, v.Name) then
                             if game.Players.LocalPlayer.Character then
                                 if v.Character then
+                                    if getgenv().PlayerModelSet == true then
+                                        spawn(function()
+                                            if not v.Character.HumanoidRootPart then
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                task.wait(0.05)
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                                task.wait(0.05)
+                                                game.Players.LocalPlayer.Character.Sword:Activate()
+                                            end
+                                        end)
+                                    end
                                     if v.Character:FindFirstChild("HumanoidRootPart") then
                                         if v.Character:FindFirstChild("Humanoid") then
                                             if v.Character.Humanoid.Health ~= 0 then
@@ -467,6 +497,17 @@ function LoopKill()
                     if table.find(Targets, v.Name) then
                         if game.Players.LocalPlayer.Character then
                             if v.Character then
+                                if getgenv().PlayerModelSet == true then
+                                    spawn(function()
+                                        if not v.Character.HumanoidRootPart then
+                                            game.Players.LocalPlayer.Character.Sword:Activate()
+                                            task.wait(0.05)
+                                            game.Players.LocalPlayer.Character.Sword:Activate()
+                                            task.wait(0.05)
+                                            game.Players.LocalPlayer.Character.Sword:Activate()
+                                        end
+                                    end)
+                                end
                                 if v.Character:FindFirstChild("HumanoidRootPart") then
                                     if v.Character:FindFirstChild("Humanoid") then
                                         if v.Character.Humanoid.Health ~= 0 then
